@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 from os import environ
 from passlib.hash import bcrypt
 from typing import Any
@@ -23,11 +24,12 @@ async def retrieve_user_handler(
     return None
 
 
-oauth2_auth = OAuth2PasswordBearerAuth(
+oauth2_auth = OAuth2PasswordBearerAuth[UserInDB](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=environ.get("JWT_SECRET", "abcd123"),
     token_url="/auth/login",
     exclude=["/auth/login", "/auth/create-user", "/schema"],
+    default_token_expiration=timedelta(days=365)
 )
 
 
@@ -41,12 +43,12 @@ async def create_user_handler(data: UserIn) -> UserOut:
     hash = bcrypt.hash(data.password)
     user_for_db = UserInDB(**data.dict(exclude={"password"}), password=hash)
 
-    await user_for_db.save()
+    await user_for_db.insert()
     return user_for_db.dict(exclude={"password", "id"})
 
 
 @post("/login")
-async def login_handler(request: Request[Any, Any], data: UserIn) -> Response[UserOut]:
+async def login_handler(request: Request[Any, Any], data: UserIn) -> Response[UserInDB]:
     user_in_db = await UserInDB.find({UserInDB.name: data.name}).first_or_none()
     if user_in_db is None and data.email is not None:
         user_in_db = await UserInDB.find({UserInDB.email: data.email}).first_or_none()
@@ -64,12 +66,15 @@ async def login_handler(request: Request[Any, Any], data: UserIn) -> Response[Us
             status_code=status_codes.HTTP_401_UNAUTHORIZED,
         )
 
-    await request.cache.set(str(user_in_db.name), user_in_db.dict())
+    await request.cache.set(str(user_in_db.id), user_in_db.dict())
     response = oauth2_auth.login(
         identifier=str(user_in_db.id),
-        response_body=user_in_db.dict(exclude={"password", "id"}),
+        response_body=user_in_db.dict(exclude={"id", "password"})
     )
     return response
 
 
 auth_router = Router("/auth", route_handlers=[login_handler, create_user_handler])
+
+
+AuthRequest = Request[UserInDB, OAuth2PasswordBearerAuth]
