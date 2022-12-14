@@ -5,6 +5,7 @@ from typing import Any
 from starlite import (
     ASGIConnection,
     HTTPException,
+    Provide,
     Request,
     Response,
     status_codes,
@@ -110,11 +111,6 @@ async def token_handler(request: Request[Any, Any]) -> dict[str, str]:
     }
 
 
-auth_router = Router(
-    "/auth", route_handlers=[login_handler, create_user_handler, token_handler]
-)
-
-
 def on_app_init(app_config: AppConfig) -> AppConfig:
     if app_config.debug:
         return app_config
@@ -130,3 +126,15 @@ async def current_active_user(request: AuthRequest) -> UserInDB:
         return user_in_db
     user_in_db = await UserInDB.find_one(UserInDB.name == request.user.name)
     return user_in_db
+
+
+@post("/logout", dependencies={"user": Provide(current_active_user)})
+async def logout_handler(request: AuthRequest, user: UserInDB) -> dict[str, str]:
+    await request.cache.delete(str(user.id))
+    return {"message": "successfully logged out"}
+
+
+auth_router = Router(
+    "/auth",
+    route_handlers=[login_handler, create_user_handler, token_handler, logout_handler],
+)

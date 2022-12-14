@@ -5,6 +5,7 @@ from starlite.config.cache import CacheConfig
 from todoapp.models import connect_db
 from .auth import on_app_init as auth_on_app_init, auth_router
 from .controllers import controller_router
+from .utils import JSONCacheBackend
 
 
 app = Starlite(

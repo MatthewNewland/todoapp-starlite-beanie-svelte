@@ -3,10 +3,11 @@
   import { goto } from "$app/navigation"
   import { authStore } from "$lib/auth.store"
   import { onMount } from "svelte"
+  import ItemEdit from "./ItemEdit.svelte"
   import { todoStore } from "./todo.store"
 
   onMount(async () => {
-    if (browser && (!$authStore.activeUser)) {
+    if (browser && !$authStore.activeUser) {
       goto("/login")
     }
   })
@@ -45,8 +46,10 @@
 <h3 class="text-lg font-semibold">Incomplete tasks:</h3>
 <ul class="ml-5 list-disc">
   {#each incompleteTasks as item (item.id)}
-    <li class="flex flex-row justify-between">
-      <span>{item.task}</span>
+    <li class="flex flex-row gap-3 justify-between">
+      <ItemEdit bind:value={item.task} on:blur={async () => {
+        await todoStore.updateTodo(item.id ?? "", item)
+      }} />
       <span class="flex flex-row gap-3 place-items-center">
         <input
           type="checkbox"
