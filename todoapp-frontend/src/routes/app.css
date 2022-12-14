@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply dark:bg-slate-900 dark:text-slate-50;
+}
+
+input[type] {
+  @apply dark:bg-slate-800;
+}

@@ -1,5 +1,5 @@
 from beanie import Document
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 from starlite import DTOFactory
 
 
@@ -12,5 +12,5 @@ class UserIn(UserOut):
     password: str
 
 
-class UserInDB(Document, UserIn):
-    pass
+class UserInDB(Document, UserOut):
+    password: SecretStr
