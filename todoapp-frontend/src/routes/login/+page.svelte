@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation"
   import { page } from "$app/stores"
-  import { authStore, type UserStore } from "$lib/auth.store"
+  import { authStore, type UserStore } from "$lib/store/auth"
 
   let username = ""
   let password = ""

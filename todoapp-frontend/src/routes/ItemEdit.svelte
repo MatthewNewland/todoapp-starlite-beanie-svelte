@@ -18,13 +18,15 @@
   {#if !editing}
     <span>{value}</span>
   {:else}
-    <input
-      type="text"
-      bind:value
-      on:keydown={handleKeydown}
-    />
+    <input type="text" bind:value on:keydown={handleKeydown} />
   {/if}
-  <button class="material-icons" on:click={() => (editing = !editing)}>
-    edit
+  <button
+    class="material-icons"
+    on:click={() => {
+      editing = !editing
+      dispatch("blur")
+    }}
+  >
+    {editing ? "save" : "edit"}
   </button>
 </div>

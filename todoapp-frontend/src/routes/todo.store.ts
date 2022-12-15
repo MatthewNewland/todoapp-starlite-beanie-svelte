@@ -1,6 +1,6 @@
 import { writable, get } from "svelte/store"
 import type { TodoItem } from "$lib/models"
-import { authStore } from "$lib/auth.store"
+import { authStore } from "$lib/store/auth"
 import ky from "ky-universal"
 
 const BASE_URL = "http://127.0.0.1:8000/api/todos/"

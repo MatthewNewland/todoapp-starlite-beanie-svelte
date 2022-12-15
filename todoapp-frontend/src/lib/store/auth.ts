@@ -1,8 +1,9 @@
 import { browser } from "$app/environment"
 import { goto } from "$app/navigation"
 import { writable, get } from "svelte/store"
-import type { User } from "./models"
+import type { User } from "../models"
 import ky from "ky-universal"
+import { snackbarService } from "./snackbar"
 
 const BASE_URL = "http://localhost:8000/auth"
 
@@ -45,6 +46,9 @@ const createStore = () => {
           authorization: `${user.name ?? user.email}:${user.password}`,
         },
       })
+      if ([401, 403].includes(result.status)) {
+        snackbarService.showError("Error: invalid user credentials. Please login again.")
+      }
       const json = await result.json<any>()
       const { access_token, userOut } = json
       this.set({

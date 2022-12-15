@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta
 from os import environ
 from passlib.hash import bcrypt
 from typing import Any
@@ -43,10 +43,10 @@ async def create_user_handler(data: UserIn) -> UserOut:
         )
 
     hash = bcrypt.hash(data.password)
-    user_for_db = UserInDB(**data.dict(), password=hash)
+    user_for_db = UserInDB(**data.dict(exclude={"password"}), password=hash)
 
     await user_for_db.insert()
-    return user_for_db.dict(exclude={"id"})
+    return user_for_db.dict(exclude={"id", "password"})
 
 
 @post("/login")
