@@ -38,9 +38,10 @@
   <input type="text" placeholder="Next task..." bind:value={nextTask} />
   <button
     type="submit"
-    class="px-2 py-1 bg-sky-600 text-slate-50 dark:bg-sky-700"
-    >Add Task</button
+    class="p-2 material-icons"
   >
+    add
+  </button>
 </form>
 
 <h3 class="text-lg font-semibold">Incomplete tasks:</h3>

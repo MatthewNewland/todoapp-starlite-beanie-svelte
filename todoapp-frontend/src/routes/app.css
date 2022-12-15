@@ -7,5 +7,13 @@ body {
 }
 
 input[type] {
-  @apply dark:bg-slate-800;
+  @apply dark:bg-slate-800 border-none rounded-md;
+}
+
+input[type="checkbox"] {
+  @apply rounded;
+}
+
+button {
+  @apply rounded-md;
 }
