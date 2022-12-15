@@ -38,7 +38,7 @@
   <input type="text" placeholder="Next task..." bind:value={nextTask} />
   <button
     type="submit"
-    class="px-2 py-1 bg-blue-600 text-slate-50 dark:bg-blue-700"
+    class="px-2 py-1 bg-sky-600 text-slate-50 dark:bg-sky-700"
     >Add Task</button
   >
 </form>
@@ -53,6 +53,7 @@
       <span class="flex flex-row gap-3 place-items-center">
         <input
           type="checkbox"
+          class="dark:text-sky-700"
           checked={item.completed}
           on:change={() => todoStore.toggleComplete(item.id)}
         />
@@ -74,6 +75,7 @@
       <span class="flex flex-row gap-3 place-items-center">
         <input
           type="checkbox"
+          class="dark:text-sky-700"
           checked={item.completed}
           on:change={() => todoStore.toggleComplete(item.id)}
         />

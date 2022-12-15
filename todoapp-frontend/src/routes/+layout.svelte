@@ -13,11 +13,11 @@
 
 <header class="m-3 w-full flex flex-row">
   <div></div>
-  <button on:click={() => snackbarService.showInfo("Hello, world")}>
+  <button class="px-2 py-1 hover:bg-sky-700" on:click={() => snackbarService.showError("Hello, world")}>
     Show Message
   </button>
   <button
-    class="dark:bg-blue-700 px-2 py-1 ml-auto mr-7"
+    class="dark:bg-sky-700 px-2 py-1 ml-auto mr-7"
     on:click={authStore.logout}
   >
     Logout

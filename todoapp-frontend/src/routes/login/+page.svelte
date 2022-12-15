@@ -11,9 +11,6 @@
         name: username,
         password
     })
-    authStore.subscribe((value: UserStore) => {
-        console.log(value)
-    })
 
     const redirect = $page.url.searchParams.get("redirect")
     goto(redirect ?? "/")
@@ -28,7 +25,7 @@
   <input type="text" bind:value={username} />
   <label for="password">Password:</label>
   <input type="password" bind:value={password} />
-  <button type="submit" class="col-span-2 dark:bg-blue-700 px-2 py-1">
+  <button type="submit" class="col-span-2 dark:bg-sky-700 px-2 py-1">
     Login
   </button>
 </form>
